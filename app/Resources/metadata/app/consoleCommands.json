@@ -1,0 +1,5 @@
+{
+  "digital-ocean:sync": {
+    "className": "DigitalOceanCdn\\Console\\SyncSpaces"
+  }
+}

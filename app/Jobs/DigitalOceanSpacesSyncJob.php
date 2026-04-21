@@ -13,7 +13,6 @@ class DigitalOceanSpacesSyncJob extends QueueManagerBase
         if (empty($data['storageId'])) {
             return false;
         }
-        /** @var \DigitalOceanCdn\Services\DigitalOceanSpacesSync $service */
         $service = $this->getContainer()->get('serviceFactory')->create('DigitalOceanSpacesSync');
         $service->runSync((string)$data['storageId']);
         return true;

@@ -20,9 +20,7 @@ class DigitalOceanSpaces extends Base
         if (empty($id)) {
             throw new BadRequest('Storage id is required');
         }
-
-        /** @var \DigitalOceanCdn\Services\DigitalOceanSpacesSync $service */
         $service = $this->getContainer()->get('serviceFactory')->create('DigitalOceanSpacesSync');
-        return $service->queueSync($id);
+        return $service->queueSync((string)$id);
     }
 }

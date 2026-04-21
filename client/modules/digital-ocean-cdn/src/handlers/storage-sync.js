@@ -6,7 +6,7 @@ Espo.define("digital-ocean-cdn:handlers/storage-sync", [], function () {
         Espo.Ui.warning("Only available for Digital Ocean Spaces storage.");
         return;
       }
-      Espo.Ui.notify("Starting sync...");
+      Espo.Ui.notify("Queueing sync...");
       view
         .ajaxPostRequest("DigitalOceanSpaces/action/sync", { id: model.id })
         .then(function (res) {

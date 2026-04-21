@@ -1,5 +1,8 @@
 {
   "fields": {
+    "connection": "Conexão",
+    "doPathPrefix": "Prefixo de caminho",
+    "doCdnEndpoint": "Endpoint CDN",
     "syncEnabled": "Sincronização habilitada",
     "syncDirection": "Direção da sincronização",
     "syncOnFileSave": "Enviar automaticamente ao salvar arquivo",

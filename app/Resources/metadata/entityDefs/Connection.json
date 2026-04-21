@@ -120,5 +120,12 @@
         }
       }
     }
+  },
+  "links": {
+    "storages": {
+      "type": "hasMany",
+      "entity": "Storage",
+      "foreign": "connection"
+    }
   }
 }

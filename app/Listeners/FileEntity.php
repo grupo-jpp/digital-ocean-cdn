@@ -12,10 +12,9 @@ class FileEntity extends AbstractListener
     public function afterSave(Event $event): void
     {
         $entity = $event->getArgument('entity');
-        if (!$entity || $entity->get('storageId') === null) {
+        if (!$entity || !$entity->get('storageId')) {
             return;
         }
-
         $storage = $this->getEntityManager()->getEntity('Storage', $entity->get('storageId'));
         if (!$storage
             || $storage->get('type') !== 'digitalOceanSpaces'
@@ -26,7 +25,6 @@ class FileEntity extends AbstractListener
 
         /** @var \DigitalOceanCdn\Core\FileStorage\DigitalOceanSpacesStorage $fs */
         $fs = $this->getContainer()->get('fileStorageManager')->getStorage('digitalOceanSpaces');
-
         if ($fs->exists($storage, $entity)) {
             return;
         }
@@ -37,5 +35,22 @@ class FileEntity extends AbstractListener
         if (is_file($path)) {
             $fs->upload($storage, $entity, (string)file_get_contents($path));
         }
+    }
+
+    public function afterRemove(Event $event): void
+    {
+        $entity = $event->getArgument('entity');
+        if (!$entity || !$entity->get('storageId')) {
+            return;
+        }
+        $storage = $this->getEntityManager()->getEntity('Storage', $entity->get('storageId'));
+        if (!$storage
+            || $storage->get('type') !== 'digitalOceanSpaces'
+            || !$storage->get('syncDeleteRemote')) {
+            return;
+        }
+        /** @var \DigitalOceanCdn\Core\FileStorage\DigitalOceanSpacesStorage $fs */
+        $fs = $this->getContainer()->get('fileStorageManager')->getStorage('digitalOceanSpaces');
+        $fs->delete($storage, $entity);
     }
 }
