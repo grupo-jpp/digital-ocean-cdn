@@ -1,0 +1,7 @@
+[
+  {
+    "route": "/DigitalOceanSpaces/action/sync",
+    "method": "post",
+    "params": { "controller": "DigitalOceanSpaces", "action": "sync" }
+  }
+]

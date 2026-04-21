@@ -1,34 +1,45 @@
 {
   "fields": {
-    "doRegion": {
-      "type": "varchar",
-      "tooltip": true,
-      "default": "nyc3"
-    },
-    "doBucket": {
-      "type": "varchar",
-      "tooltip": true
-    },
+    "doRegion": { "type": "varchar", "tooltip": true, "default": "nyc3" },
+    "doBucket": { "type": "varchar", "tooltip": true },
     "doEndpoint": {
       "type": "varchar",
       "tooltip": true,
       "default": "https://nyc3.digitaloceanspaces.com"
     },
-    "doCdnEndpoint": {
-      "type": "varchar",
+    "doCdnEndpoint": { "type": "varchar", "tooltip": true },
+    "doAccessKey": { "type": "varchar", "tooltip": true },
+    "doSecretKey": { "type": "password", "tooltip": true },
+    "doPathPrefix": { "type": "varchar", "default": "" },
+
+    "syncEnabled": {
+      "type": "bool",
+      "tooltip": true,
+      "default": false
+    },
+    "syncDirection": {
+      "type": "enum",
+      "options": ["upload", "download", "both"],
+      "default": "upload",
       "tooltip": true
     },
-    "doAccessKey": {
-      "type": "varchar",
+    "syncOnFileSave": {
+      "type": "bool",
+      "default": true,
       "tooltip": true
     },
-    "doSecretKey": {
-      "type": "password",
+    "syncDeleteRemote": {
+      "type": "bool",
+      "default": false,
       "tooltip": true
     },
-    "doPathPrefix": {
+    "lastSyncAt": {
+      "type": "datetime",
+      "readOnly": true
+    },
+    "lastSyncStatus": {
       "type": "varchar",
-      "default": ""
+      "readOnly": true
     }
   }
 }

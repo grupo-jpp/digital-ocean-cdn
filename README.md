@@ -32,70 +32,109 @@ This module adds a new **File Storage** type called **Digital Ocean Spaces**, al
 
 ## Installation
 
-### Via Composer
+> This module is distributed as a Git repository. To install via Composer you **must have a published Git tag** (e.g. `v1.0.7`). Composer resolves versions from tags.
 
-```sh
-composer require atrocore/digital-ocean-cdn
+### Option A — Composer with private/public Git repository (recommended)
+
+1. In the AtroCore project `composer.json`, add the repository:
+
+```json
+{
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/grupo-jpp/digital-ocean-cdn.git"
+    }
+  ]
+}
 ```
 
-### Manual
+2. Require the module:
 
-1. Copy the module into your AtroCore installation under `vendor/atrocore/digital-ocean-cdn`.
-2. Run:
+```sh
+composer require grupo-jpp/digital-ocean-cdn:^1.0
+```
+
+> Private repository? Configure a token first:
+>
+> ```sh
+> composer config --global --auth github-oauth.github.com <PERSONAL_ACCESS_TOKEN>
+> ```
+
+### Option B — Manual install
+
+1. Clone or copy the module into:
+
+```
+vendor/grupo-jpp/digital-ocean-cdn
+```
+
+2. Register it in the project autoload if needed and run:
 
 ```sh
 php console.php clear-cache
 php console.php migrate DigitalOceanCdn
+php console.php rebuild
 ```
 
-3. Rebuild the admin UI if necessary.
+### Option C — Inside a Docker/Coolify container
 
----
+```sh
+WEB=$(docker ps --format "{{.Names}}" | grep "^web-")
+PROJ=$(docker exec $WEB ls /var/www | grep -v html)
 
-## Configuration
-
-1. In the admin panel, go to **Administration → Storages**.
-2. (Optional but recommended) Go to **Administration → Connections** and create a **Digital Ocean Spaces** connection.
-3. Click **Create Storage** and select **Digital Ocean Spaces** as the type.
-4. Fill in the fields:
-
-| Field           | Key             | Description                                             |
-| --------------- | --------------- | ------------------------------------------------------- |
-| Region (DO)     | `doRegion`      | e.g. `nyc3`, `ams3`, `sfo3`                             |
-| Bucket / Space  | `doBucket`      | Name of your Space                                      |
-| Spaces Endpoint | `doEndpoint`    | e.g. `https://nyc3.digitaloceanspaces.com`              |
-| CDN Endpoint    | `doCdnEndpoint` | e.g. `https://my-space.nyc3.cdn.digitaloceanspaces.com` |
-| Access Key      | `doAccessKey`   | DigitalOcean Spaces access key                          |
-| Secret Key      | `doSecretKey`   | DigitalOcean Spaces secret key                          |
-| Path Prefix     | `doPathPrefix`  | Optional folder prefix inside the Space                 |
-| (Connection) Bucket | `doSpacesBucket` | Optional default bucket from a saved connection      |
-
-> If **CDN Endpoint** is provided, `getUrl()` returns a direct CDN URL; otherwise a presigned URL is generated.
-
----
-
-## How it works
-
-The module is bootstrapped by `DigitalOceanCdn\Module` with load order `5200`. It registers the storage class through `app/Resources/metadata/app/storages.json`, and AtroCore picks it up automatically as an available storage option.
-
-Object keys are built as:
-
-```
-{doPathPrefix}/{file.path}
+docker exec $WEB sh -c "cd /var/www/$PROJ && composer require grupo-jpp/digital-ocean-cdn:^1.0 \
+  && composer dump-autoload -o \
+  && php console.php clear-cache \
+  && php console.php rebuild"
 ```
 
 ---
 
-## Localization
-
-- English: `app/Resources/i18n/en_US/Storage.json`
-- Portuguese (Brazil): `app/Resources/i18n/pt_BR/Storage.json`
-
----
+// ...existing code...
 
 ## Release
 
-Current version: **1.0.0**
+Current version: **1.0.7**
+
+### Publishing a new version
+
+Composer installs from **Git tags**. After committing changes, create a tag and push it:
+
+```sh
+# bump the version in composer.json (optional but recommended)
+git add .
+git commit -m "Release 1.0.8"
+
+# create annotated tag
+git tag -a v1.0.8 -m "Release 1.0.8"
+
+# push commits + tags
+git push origin main --follow-tags
+```
+
+Then create the GitHub Release (optional, for changelog):
+
+```sh
+gh release create v1.0.8 --title "v1.0.8" --notes "Changelog..."
+```
+
+After the tag is published, upgrade on the target environment:
+
+```sh
+composer update grupo-jpp/digital-ocean-cdn
+php console.php clear-cache && php console.php rebuild
+```
+
+### Versioning
+
+This project follows **Semantic Versioning** (`MAJOR.MINOR.PATCH`):
+
+- `MAJOR` — breaking changes in storage/connection API
+- `MINOR` — new features (sync, new fields) keeping backward compatibility
+- `PATCH` — bug fixes and internal adjustments
+
+---
 
 ## License
 
