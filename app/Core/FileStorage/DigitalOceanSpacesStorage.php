@@ -17,24 +17,21 @@ class DigitalOceanSpacesStorage extends AbstractFileStorage
     protected function getClient(Storage $storage): S3Client
     {
         $id = (string)$storage->get('id');
-        $cacheKey = $id ?: md5((string)json_encode([
-            $this->getStorageValue($storage, ['doEndpoint', 'doSpacesEndpoint']),
-            $this->getStorageValue($storage, ['doRegion', 'doSpacesRegion'], 'us-east-1'),
-            $this->getStorageValue($storage, ['doBucket', 'doSpacesBucket']),
-        ]));
+        $region = $this->getStorageValue($storage, ['doRegion', 'doSpacesRegion'], 'us-east-1');
+        $endpoint = rtrim((string)$this->getStorageValue($storage, ['doEndpoint', 'doSpacesEndpoint']), '/');
+        $accessKey = $this->getStorageValue($storage, ['doAccessKey', 'doSpacesAccessKey']);
+        $secretKey = $this->getStorageValue($storage, ['doSecretKey', 'doSpacesSecretKey']);
+
+        if (empty($endpoint) || empty($accessKey) || empty($secretKey)) {
+            throw new RuntimeException('DigitalOcean Spaces storage is not fully configured.');
+        }
+
+        $cacheKey = $id ?: md5((string)json_encode([$endpoint, $region]));
 
         if (!isset($this->clients[$cacheKey])) {
-            $endpoint = rtrim($this->getStorageValue($storage, ['doEndpoint', 'doSpacesEndpoint']), '/');
-            $accessKey = $this->getStorageValue($storage, ['doAccessKey', 'doSpacesAccessKey']);
-            $secretKey = $this->getStorageValue($storage, ['doSecretKey', 'doSpacesSecretKey']);
-
-            if (empty($endpoint) || empty($accessKey) || empty($secretKey)) {
-                throw new RuntimeException('DigitalOcean Spaces storage is not fully configured.');
-            }
-
             $this->clients[$cacheKey] = new S3Client([
                 'version'                 => 'latest',
-                'region'                  => $this->getStorageValue($storage, ['doRegion', 'doSpacesRegion'], 'us-east-1'),
+                'region'                  => $region,
                 'endpoint'                => $endpoint,
                 'use_path_style_endpoint' => false,
                 'credentials'             => [
@@ -61,12 +58,17 @@ class DigitalOceanSpacesStorage extends AbstractFileStorage
 
     protected function getBucket(Storage $storage): string
     {
-        return $this->getStorageValue($storage, ['doBucket', 'doSpacesBucket']) ?? '';
+        $bucket = $this->getStorageValue($storage, ['doBucket', 'doSpacesBucket']);
+        if (empty($bucket)) {
+            throw new RuntimeException('DigitalOcean Spaces bucket is not configured.');
+        }
+
+        return $bucket;
     }
 
     protected function encodePathForUrl(string $path): string
     {
-        $segments = array_values(array_filter(explode('/', $path), static fn(string $segment) => $segment !== ''));
+        $segments = array_values(array_filter(explode('/', $path), static fn(string $pathSegment) => $pathSegment !== ''));
         return implode('/', array_map('rawurlencode', $segments));
     }
 
@@ -80,13 +82,8 @@ class DigitalOceanSpacesStorage extends AbstractFileStorage
     public function upload(Storage $storage, File $file, string $contents): bool
     {
         try {
-            $bucket = $this->getBucket($storage);
-            if (empty($bucket)) {
-                throw new RuntimeException('DigitalOcean Spaces bucket is not configured.');
-            }
-
             $this->getClient($storage)->putObject([
-                'Bucket'      => $bucket,
+                'Bucket'      => $this->getBucket($storage),
                 'Key'         => $this->getKey($storage, $file),
                 'Body'        => $contents,
                 'ACL'         => 'public-read',
@@ -102,13 +99,8 @@ class DigitalOceanSpacesStorage extends AbstractFileStorage
     public function delete(Storage $storage, File $file): bool
     {
         try {
-            $bucket = $this->getBucket($storage);
-            if (empty($bucket)) {
-                throw new RuntimeException('DigitalOcean Spaces bucket is not configured.');
-            }
-
             $this->getClient($storage)->deleteObject([
-                'Bucket' => $bucket,
+                'Bucket' => $this->getBucket($storage),
                 'Key'    => $this->getKey($storage, $file),
             ]);
             return true;
@@ -121,13 +113,8 @@ class DigitalOceanSpacesStorage extends AbstractFileStorage
     public function getContents(Storage $storage, File $file): ?string
     {
         try {
-            $bucket = $this->getBucket($storage);
-            if (empty($bucket)) {
-                throw new RuntimeException('DigitalOcean Spaces bucket is not configured.');
-            }
-
             $result = $this->getClient($storage)->getObject([
-                'Bucket' => $bucket,
+                'Bucket' => $this->getBucket($storage),
                 'Key'    => $this->getKey($storage, $file),
             ]);
             return (string)$result['Body'];
@@ -146,13 +133,8 @@ class DigitalOceanSpacesStorage extends AbstractFileStorage
         }
 
         try {
-            $bucket = $this->getBucket($storage);
-            if (empty($bucket)) {
-                throw new RuntimeException('DigitalOcean Spaces bucket is not configured.');
-            }
-
             $cmd = $this->getClient($storage)->getCommand('GetObject', [
-                'Bucket' => $bucket,
+                'Bucket' => $this->getBucket($storage),
                 'Key'    => $this->getKey($storage, $file),
             ]);
             $request = $this->getClient($storage)->createPresignedRequest($cmd, '+20 minutes');
@@ -165,13 +147,8 @@ class DigitalOceanSpacesStorage extends AbstractFileStorage
     public function exists(Storage $storage, File $file): bool
     {
         try {
-            $bucket = $this->getBucket($storage);
-            if (empty($bucket)) {
-                throw new RuntimeException('DigitalOcean Spaces bucket is not configured.');
-            }
-
             return $this->getClient($storage)->doesObjectExist(
-                $bucket,
+                $this->getBucket($storage),
                 $this->getKey($storage, $file)
             );
         } catch (\Throwable $e) {
