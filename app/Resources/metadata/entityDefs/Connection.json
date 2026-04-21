@@ -1,0 +1,110 @@
+{
+  "fields": {
+    "type": {
+      "options": [
+        "atrocore",
+        "pdoSql",
+        "mysql",
+        "psql",
+        "msql",
+        "ftp",
+        "sftp",
+        "oauth2",
+        "oauth1",
+        "otto",
+        "cookie",
+        "smtp",
+        "vertica",
+        "tokenAuthApi",
+        "doSpaces"
+      ]
+    },
+    "doSpacesEndpoint": {
+      "type": "url",
+      "notStorable": true,
+      "dataField": true,
+      "trim": true,
+      "default": "https://nyc3.digitaloceanspaces.com",
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            { "type": "in", "attribute": "type", "value": ["doSpaces"] }
+          ]
+        },
+        "required": {
+          "conditionGroup": [
+            { "type": "in", "attribute": "type", "value": ["doSpaces"] }
+          ]
+        }
+      }
+    },
+    "doSpacesRegion": {
+      "type": "varchar",
+      "notStorable": true,
+      "dataField": true,
+      "trim": true,
+      "default": "nyc3",
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            { "type": "in", "attribute": "type", "value": ["doSpaces"] }
+          ]
+        },
+        "required": {
+          "conditionGroup": [
+            { "type": "in", "attribute": "type", "value": ["doSpaces"] }
+          ]
+        }
+      }
+    },
+    "doSpacesAccessKey": {
+      "type": "varchar",
+      "notStorable": true,
+      "dataField": true,
+      "trim": true,
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            { "type": "in", "attribute": "type", "value": ["doSpaces"] }
+          ]
+        },
+        "required": {
+          "conditionGroup": [
+            { "type": "in", "attribute": "type", "value": ["doSpaces"] }
+          ]
+        }
+      }
+    },
+    "doSpacesSecretKey": {
+      "type": "password",
+      "notStorable": true,
+      "dataField": true,
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            { "type": "in", "attribute": "type", "value": ["doSpaces"] }
+          ]
+        },
+        "required": {
+          "conditionGroup": [
+            { "type": "in", "attribute": "type", "value": ["doSpaces"] }
+          ]
+        }
+      }
+    },
+    "doSpacesCdnEndpoint": {
+      "type": "url",
+      "notStorable": true,
+      "dataField": true,
+      "trim": true,
+      "tooltip": true,
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            { "type": "in", "attribute": "type", "value": ["doSpaces"] }
+          ]
+        }
+      }
+    }
+  }
+}

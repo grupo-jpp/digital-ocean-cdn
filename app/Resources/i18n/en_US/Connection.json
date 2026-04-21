@@ -1,0 +1,18 @@
+{
+  "fields": {
+    "doSpacesEndpoint": "Endpoint",
+    "doSpacesRegion": "Region",
+    "doSpacesBucket": "Bucket",
+    "doSpacesAccessKey": "Access Key",
+    "doSpacesSecretKey": "Secret Key",
+    "doSpacesCdnEndpoint": "CDN Endpoint"
+  },
+  "tooltips": {
+    "doSpacesCdnEndpoint": "Optional. Public CDN URL (e.g. https://bucket.nyc3.cdn.digitaloceanspaces.com). If empty, direct endpoint is used."
+  },
+  "options": {
+    "type": {
+      "doSpaces": "Digital Ocean Spaces"
+    }
+  }
+}
