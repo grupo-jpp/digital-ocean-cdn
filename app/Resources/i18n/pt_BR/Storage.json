@@ -1,5 +1,8 @@
 {
   "fields": {
+    "type": {
+      "options": ["local", "digitalOceanSpaces"]
+    },
     "connection": "Conexão",
     "doPathPrefix": "Prefixo de caminho",
     "doCdnEndpoint": "Endpoint CDN",
@@ -15,6 +18,10 @@
       "upload": "Enviar (local → Spaces)",
       "download": "Baixar (Spaces → local)",
       "both": "Ambos"
+    },
+    "type": {
+      "local": "Local",
+      "digitalOceanSpaces": "Digital Ocean Spaces"
     }
   },
   "labels": {

@@ -1,45 +1,54 @@
 {
   "fields": {
-    "doRegion": { "type": "varchar", "tooltip": true, "default": "nyc3" },
-    "doBucket": { "type": "varchar", "tooltip": true },
-    "doEndpoint": {
-      "type": "varchar",
-      "tooltip": true,
-      "default": "https://nyc3.digitaloceanspaces.com"
+    "type": {
+      "options": ["local", "digitalOceanSpaces"]
     },
-    "doCdnEndpoint": { "type": "varchar", "tooltip": true },
-    "doAccessKey": { "type": "varchar", "tooltip": true },
-    "doSecretKey": { "type": "password", "tooltip": true },
-    "doPathPrefix": { "type": "varchar", "default": "" },
+    "connection": {
+      "type": "link",
+      "tooltip": true,
+      "view": "views/fields/link",
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            {
+              "type": "in",
+              "attribute": "type",
+              "value": ["digitalOceanSpaces"]
+            }
+          ]
+        },
+        "required": {
+          "conditionGroup": [
+            {
+              "type": "in",
+              "attribute": "type",
+              "value": ["digitalOceanSpaces"]
+            }
+          ]
+        }
+      }
+    },
 
-    "syncEnabled": {
-      "type": "bool",
-      "tooltip": true,
-      "default": false
-    },
+    "doPathPrefix": { "type": "varchar", "default": "" },
+    "doCdnEndpoint": { "type": "varchar", "tooltip": true },
+
+    "syncEnabled": { "type": "bool", "default": false, "tooltip": true },
     "syncDirection": {
       "type": "enum",
       "options": ["upload", "download", "both"],
       "default": "upload",
       "tooltip": true
     },
-    "syncOnFileSave": {
-      "type": "bool",
-      "default": true,
-      "tooltip": true
-    },
-    "syncDeleteRemote": {
-      "type": "bool",
-      "default": false,
-      "tooltip": true
-    },
-    "lastSyncAt": {
-      "type": "datetime",
-      "readOnly": true
-    },
-    "lastSyncStatus": {
-      "type": "varchar",
-      "readOnly": true
+    "syncOnFileSave": { "type": "bool", "default": true, "tooltip": true },
+    "syncDeleteRemote": { "type": "bool", "default": false, "tooltip": true },
+    "lastSyncAt": { "type": "datetime", "readOnly": true },
+    "lastSyncStatus": { "type": "varchar", "readOnly": true }
+  },
+  "links": {
+    "connection": {
+      "type": "belongsTo",
+      "entity": "Connection",
+      "foreign": "storages"
     }
   }
 }
