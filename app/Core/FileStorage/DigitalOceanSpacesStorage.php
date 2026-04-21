@@ -48,7 +48,7 @@ class DigitalOceanSpacesStorage extends AbstractFileStorage
         return $this->clients[$cacheKey];
     }
 
-    protected function getStorageValue(Storage $storage, array $keys, ?string $default = ''): string
+    protected function getStorageValue(Storage $storage, array $keys, ?string $default = null): ?string
     {
         foreach ($keys as $key) {
             $value = $storage->get($key);
@@ -57,17 +57,22 @@ class DigitalOceanSpacesStorage extends AbstractFileStorage
             }
         }
 
-        return (string)$default;
+        return $default;
     }
 
     protected function getBucket(Storage $storage): string
     {
-        return $this->getStorageValue($storage, ['doBucket', 'doSpacesBucket']);
+        return $this->getStorageValue($storage, ['doBucket', 'doSpacesBucket']) ?? '';
+    }
+
+    protected function encodePathForUrl(string $path): string
+    {
+        return implode('/', array_map('rawurlencode', explode('/', $path)));
     }
 
     protected function getKey(Storage $storage, File $file): string
     {
-        $prefix = trim($this->getStorageValue($storage, ['doPathPrefix']), '/');
+        $prefix = trim((string)($this->getStorageValue($storage, ['doPathPrefix']) ?? ''), '/');
         $path   = ltrim((string)$file->get('path'), '/');
         return $prefix ? $prefix . '/' . $path : $path;
     }
@@ -134,9 +139,9 @@ class DigitalOceanSpacesStorage extends AbstractFileStorage
 
     public function getUrl(Storage $storage, File $file): ?string
     {
-        $cdn = rtrim($this->getStorageValue($storage, ['doCdnEndpoint', 'doSpacesCdnEndpoint']), '/');
+        $cdn = rtrim((string)($this->getStorageValue($storage, ['doCdnEndpoint', 'doSpacesCdnEndpoint']) ?? ''), '/');
         if ($cdn) {
-            $encodedKey = implode('/', array_map('rawurlencode', explode('/', $this->getKey($storage, $file))));
+            $encodedKey = $this->encodePathForUrl($this->getKey($storage, $file));
             return $cdn . '/' . $encodedKey;
         }
 
