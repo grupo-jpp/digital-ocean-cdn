@@ -1,29 +1,92 @@
 {
   "fields": {
+    "type": {
+      "options": ["local", "digitalOceanSpaces"]
+    },
     "connection": {
       "type": "link",
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            {
+              "type": "equals",
+              "attribute": "type",
+              "value": "digitalOceanSpaces"
+            }
+          ]
+        },
+        "required": {
+          "conditionGroup": [
+            {
+              "type": "equals",
+              "attribute": "type",
+              "value": "digitalOceanSpaces"
+            }
+          ]
+        }
+      }
+    },
+    "bucket": {
+      "type": "varchar",
+      "trim": true,
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            {
+              "type": "equals",
+              "attribute": "type",
+              "value": "digitalOceanSpaces"
+            }
+          ]
+        },
+        "required": {
+          "conditionGroup": [
+            {
+              "type": "equals",
+              "attribute": "type",
+              "value": "digitalOceanSpaces"
+            }
+          ]
+        }
+      }
+    },
+    "cdnEndpoint": {
+      "type": "url",
+      "trim": true,
       "tooltip": true,
-      "view": "views/fields/link"
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            {
+              "type": "equals",
+              "attribute": "type",
+              "value": "digitalOceanSpaces"
+            }
+          ]
+        }
+      }
     },
-    "doPathPrefix": { "type": "varchar", "default": "" },
-    "doCdnEndpoint": { "type": "varchar", "tooltip": true },
-    "syncEnabled": { "type": "bool", "default": false, "tooltip": true },
-    "syncDirection": {
-      "type": "enum",
-      "options": ["upload", "download", "both"],
-      "default": "upload",
-      "tooltip": true
-    },
-    "syncOnFileSave": { "type": "bool", "default": true, "tooltip": true },
-    "syncDeleteRemote": { "type": "bool", "default": false, "tooltip": true },
-    "lastSyncAt": { "type": "datetime", "readOnly": true },
-    "lastSyncStatus": { "type": "varchar", "readOnly": true }
+    "keyPrefix": {
+      "type": "varchar",
+      "trim": true,
+      "tooltip": true,
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            {
+              "type": "equals",
+              "attribute": "type",
+              "value": "digitalOceanSpaces"
+            }
+          ]
+        }
+      }
+    }
   },
   "links": {
     "connection": {
       "type": "belongsTo",
-      "entity": "Connection",
-      "foreign": "storages"
+      "entity": "Connection"
     }
   }
 }

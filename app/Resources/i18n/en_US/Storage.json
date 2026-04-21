@@ -1,20 +1,18 @@
 {
   "fields": {
-    "doRegion": "Region (DO)",
-    "doBucket": "Bucket / Space",
-    "doEndpoint": "Spaces Endpoint",
-    "doCdnEndpoint": "CDN Endpoint",
-    "doAccessKey": "Access Key",
-    "doSecretKey": "Secret Key",
-    "doPathPrefix": "Path Prefix"
+    "connection": "Connection",
+    "bucket": "Bucket (Space name)",
+    "cdnEndpoint": "CDN Endpoint",
+    "keyPrefix": "Key Prefix"
   },
   "tooltips": {
-    "doRegion": "Example: nyc3, ams3, sfo3",
-    "doBucket": "Name of the Space created in DigitalOcean",
-    "doEndpoint": "Example: https://nyc3.digitaloceanspaces.com",
-    "doCdnEndpoint": "Optional: https://your-space.nyc3.cdn.digitaloceanspaces.com",
-    "doAccessKey": "DigitalOcean Spaces access key",
-    "doSecretKey": "DigitalOcean Spaces secret key",
-    "doPathPrefix": "Optional folder prefix for all uploaded files"
+    "cdnEndpoint": "Optional CDN URL (e.g. https://cdn.example.com). Falls back to the Spaces endpoint.",
+    "keyPrefix": "Optional object-key prefix inside the bucket (e.g. 'pim/files')."
+  },
+  "options": {
+    "type": {
+      "local": "Local",
+      "digitalOceanSpaces": "Digital Ocean Spaces"
+    }
   }
 }
