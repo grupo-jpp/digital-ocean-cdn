@@ -134,6 +134,33 @@ This project follows **Semantic Versioning** (`MAJOR.MINOR.PATCH`):
 - `MINOR` — new features (sync, new fields) keeping backward compatibility
 - `PATCH` — bug fixes and internal adjustments
 
+## Configuration
+
+### Creating a Connection
+
+1. Go to **Administration → Connections** and create a new connection of type **Digital Ocean Spaces**.
+2. Fill in the fields:
+
+| Field               | Example                                                       | Notes                                                    |
+| ------------------- | ------------------------------------------------------------- | -------------------------------------------------------- |
+| Region              | `sfo3`, `nyc3`, `ams3`                                        | Region code of your Space                                |
+| **Endpoint**        | `https://sfo3.digitaloceanspaces.com`                         | ⚠️ Use the **regional** endpoint, **without** the bucket |
+| Bucket              | `jpp-product-manager`                                         | Bucket/Space name                                        |
+| Access Key          | `DO00...`                                                     | From DigitalOcean API → Spaces Keys                      |
+| Secret Key          | `••••••••`                                                    | The secret paired with the access key                    |
+| CDN Endpoint (opt.) | `https://jpp-product-manager.sfo3.cdn.digitaloceanspaces.com` | Used to build public URLs, if enabled                    |
+
+> ❌ **Do not** put `https://<bucket>.<region>.digitaloceanspaces.com` in the Endpoint — the SDK will duplicate the bucket and SSL will fail with `cURL error 60`.
+> ✅ Correct: `https://<region>.digitaloceanspaces.com` + bucket informed separately.
+
+3. Click **Test Connection**. It should return success.
+
+### Creating a Storage
+
+1. Go to **Administration → Storages** → create a new storage of type **Digital Ocean Spaces**.
+2. Link it to the connection created above (or fill credentials directly, depending on your version).
+3. Enable **Sync** if you want automatic upload of newly created files.
+
 ---
 
 ## License

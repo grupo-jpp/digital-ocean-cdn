@@ -13,6 +13,9 @@ use Espo\ORM\Entity;
 
 class ConnectionDoSpaces extends AbstractConnection implements ConnectionInterface, TestConnectionInterface
 {
+    /**
+     * Cria o client S3 a partir dos dados da Connection.
+     */
     public function connect(Entity $connectionEntity)
     {
         $data = $this->extractData($connectionEntity);
@@ -23,7 +26,7 @@ class ConnectionDoSpaces extends AbstractConnection implements ConnectionInterfa
 
         return new S3Client([
             'version'                 => 'latest',
-            'region'                  => $data['region'] ?: 'us-east-1',
+            'region'                  => $data['region'] !== '' ? $data['region'] : 'us-east-1',
             'endpoint'                => $data['endpoint'],
             'use_path_style_endpoint' => false,
             'credentials'             => [
@@ -33,6 +36,9 @@ class ConnectionDoSpaces extends AbstractConnection implements ConnectionInterfa
         ]);
     }
 
+    /**
+     * Testa a conexão (botão "Testar Conexão").
+     */
     public function testConnection(Entity $connectionEntity): bool
     {
         try {
@@ -55,6 +61,8 @@ class ConnectionDoSpaces extends AbstractConnection implements ConnectionInterfa
     /**
      * Lê os campos notStorable/dataField a partir da entity.
      * Suporta tanto get() direto quanto o objeto `data`.
+     * Também normaliza o endpoint removendo o prefixo "{bucket}." se estiver presente,
+     * evitando o erro de SSL por bucket duplicado no host.
      */
     protected function extractData(Entity $connectionEntity): array
     {
@@ -71,8 +79,8 @@ class ConnectionDoSpaces extends AbstractConnection implements ConnectionInterfa
             return is_string($v) ? trim($v) : $v;
         };
 
+        // password criptografada: tenta descriptografar; se falhar, mantém como veio
         $secret = (string)$get('doSpacesSecretKey');
-        // password criptografada: tenta descriptografar; se falhar, usa como veio
         if ($secret !== '') {
             try {
                 $decoded = $this->decryptPassword($secret);
@@ -80,16 +88,28 @@ class ConnectionDoSpaces extends AbstractConnection implements ConnectionInterfa
                     $secret = $decoded;
                 }
             } catch (\Throwable $e) {
-                // mantém o valor original
+                // mantém valor original
+            }
+        }
+
+        $endpoint = rtrim((string)$get('doSpacesEndpoint'), '/');
+        $bucket   = (string)$get('doSpacesBucket');
+
+        // Se o endpoint já contém "{bucket}." no host, remove para evitar duplicação.
+        if ($bucket !== '' && $endpoint !== '') {
+            $parts = parse_url($endpoint);
+            if (!empty($parts['host']) && str_starts_with($parts['host'], $bucket . '.')) {
+                $newHost  = substr($parts['host'], strlen($bucket) + 1);
+                $endpoint = ($parts['scheme'] ?? 'https') . '://' . $newHost;
             }
         }
 
         return [
-            'endpoint'  => rtrim((string)$get('doSpacesEndpoint'), '/'),
+            'endpoint'  => $endpoint,
             'region'    => (string)$get('doSpacesRegion'),
             'accessKey' => (string)$get('doSpacesAccessKey'),
             'secretKey' => $secret,
-            'bucket'    => (string)$get('doSpacesBucket'),
+            'bucket'    => $bucket,
             'cdn'       => rtrim((string)$get('doSpacesCdnEndpoint'), '/'),
         ];
     }
