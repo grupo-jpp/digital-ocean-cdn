@@ -1,1 +1,5 @@
-{}
+{
+  "recordViews": {
+    "detail": "digital-ocean-cdn:views/storage/record/detail"
+  }
+}
