@@ -11,7 +11,7 @@
     }
   ],
   "require": {
-    "atrocore/core": "~2.1.3",
+    "atrocore/core": ">=2.1.3 <2.4.0",
     "aws/aws-sdk-php": "^3.300"
   },
   "autoload": {
