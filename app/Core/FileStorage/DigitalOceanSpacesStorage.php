@@ -67,7 +67,7 @@ class DigitalOceanSpacesStorage extends AbstractFileStorage
 
     protected function getKey(Storage $storage, File $file): string
     {
-        $prefix = trim($this->getStorageValue($storage, ['doPathPrefix', 'doSpacesPathPrefix']), '/');
+        $prefix = trim($this->getStorageValue($storage, ['doPathPrefix']), '/');
         $path   = ltrim((string)$file->get('path'), '/');
         return $prefix ? $prefix . '/' . $path : $path;
     }
