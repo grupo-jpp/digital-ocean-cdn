@@ -1,5 +1,1 @@
-{
-  "DigitalOceanSpacesSyncJob": {
-    "handler": "DigitalOceanCdn\\Jobs\\DigitalOceanSpacesSyncJob"
-  }
-}
+{}

@@ -1,10 +1,1 @@
-{
-  "detailActionList": [
-    {
-      "label": "syncNow",
-      "name": "syncNow",
-      "acl": "edit",
-      "data": { "handler": "digital-ocean-cdn:handlers/storage-sync" }
-    }
-  ]
-}
+{}

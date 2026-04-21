@@ -1,6 +1,0 @@
-{
-  "digitalOceanSpaces": {
-    "handler": "DigitalOceanCdn\\Connection\\ConnectionDigitalOceanSpaces",
-    "label": "Digital Ocean Spaces"
-  }
-}

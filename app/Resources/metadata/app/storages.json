@@ -1,6 +1,1 @@
-{
-  "digitalOceanSpaces": {
-    "fileStorageClass": "DigitalOceanCdn\\Core\\FileStorage\\DigitalOceanSpacesStorage",
-    "label": "Digital Ocean Spaces"
-  }
-}
+{}

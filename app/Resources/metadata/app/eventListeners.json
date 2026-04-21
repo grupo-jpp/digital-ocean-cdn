@@ -1,6 +1,1 @@
-{
-  "File": {
-    "afterSave": ["DigitalOceanCdn\\Listeners\\FileEntity"],
-    "afterRemove": ["DigitalOceanCdn\\Listeners\\FileEntity"]
-  }
-}
+{}

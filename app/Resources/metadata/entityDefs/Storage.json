@@ -1,37 +1,12 @@
 {
   "fields": {
-    "type": {
-      "options": ["local", "digitalOceanSpaces"]
-    },
     "connection": {
       "type": "link",
       "tooltip": true,
-      "view": "views/fields/link",
-      "conditionalProperties": {
-        "visible": {
-          "conditionGroup": [
-            {
-              "type": "in",
-              "attribute": "type",
-              "value": ["digitalOceanSpaces"]
-            }
-          ]
-        },
-        "required": {
-          "conditionGroup": [
-            {
-              "type": "in",
-              "attribute": "type",
-              "value": ["digitalOceanSpaces"]
-            }
-          ]
-        }
-      }
+      "view": "views/fields/link"
     },
-
     "doPathPrefix": { "type": "varchar", "default": "" },
     "doCdnEndpoint": { "type": "varchar", "tooltip": true },
-
     "syncEnabled": { "type": "bool", "default": false, "tooltip": true },
     "syncDirection": {
       "type": "enum",
