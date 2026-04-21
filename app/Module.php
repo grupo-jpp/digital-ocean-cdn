@@ -4,16 +4,12 @@ declare(strict_types=1);
 
 namespace DigitalOceanCdn;
 
-use Atro\Core\AbstractModule;
+use Atro\Core\ModuleManager\AbstractModule;
 
 class Module extends AbstractModule
 {
     public static function getLoadOrder(): int
     {
-        return 5200;
-    }
-
-    public function onLoad(): void
-    {
+        return 5110;
     }
 }
