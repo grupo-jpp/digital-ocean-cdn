@@ -1,0 +1,33 @@
+{
+  "name": "atrocore/digital-ocean-cdn",
+  "description": "Digital Ocean Spaces CDN integration for AtroCore/AtroPIM",
+  "type": "atrocore-module",
+  "license": "MIT",
+  "repositories": [
+    {
+      "type": "git",
+      "url": "https://github.com/grupo-jpp/digital-ocean-cdn.git"
+    }
+  ],
+  "require": {
+    "atrocore/core": "~2.1.3",
+    "aws/aws-sdk-php": "^3.300"
+  },
+  "autoload": {
+    "psr-4": {
+      "DigitalOceanCdn\\": "app/"
+    }
+  },
+  "extra": {
+    "atroId": "DigitalOceanCdn",
+    "name": {
+      "default": "Digital Ocean CDN",
+      "en_US": "Digital Ocean CDN",
+      "pt_BR": "Digital Ocean CDN"
+    },
+    "description": {
+      "default": "Integration with Digital Ocean Spaces CDN (S3-compatible).",
+      "pt_BR": "Integração com Digital Ocean Spaces CDN (compatível com S3)."
+    }
+  }
+}

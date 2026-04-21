@@ -1,0 +1,31 @@
+{
+  "fields": {
+    "doRegion": {
+      "type": "varchar",
+      "tooltip": true
+    },
+    "doBucket": {
+      "type": "varchar",
+      "tooltip": true
+    },
+    "doEndpoint": {
+      "type": "varchar",
+      "tooltip": true,
+      "default": "https://nyc3.digitaloceanspaces.com"
+    },
+    "doCdnEndpoint": {
+      "type": "varchar",
+      "tooltip": true
+    },
+    "doAccessKey": {
+      "type": "varchar"
+    },
+    "doSecretKey": {
+      "type": "password"
+    },
+    "doPathPrefix": {
+      "type": "varchar",
+      "default": ""
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "fields": {
+    "doRegion": "Region (DO)",
+    "doBucket": "Bucket / Space",
+    "doEndpoint": "Spaces Endpoint",
+    "doCdnEndpoint": "CDN Endpoint",
+    "doAccessKey": "Access Key",
+    "doSecretKey": "Secret Key",
+    "doPathPrefix": "Path Prefix"
+  }
+}
