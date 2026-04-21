@@ -7,5 +7,14 @@
     "doAccessKey": "Access Key",
     "doSecretKey": "Secret Key",
     "doPathPrefix": "Path Prefix"
+  },
+  "tooltips": {
+    "doRegion": "Example: nyc3, ams3, sfo3",
+    "doBucket": "Name of the Space created in DigitalOcean",
+    "doEndpoint": "Example: https://nyc3.digitaloceanspaces.com",
+    "doCdnEndpoint": "Optional: https://your-space.nyc3.cdn.digitaloceanspaces.com",
+    "doAccessKey": "DigitalOcean Spaces access key",
+    "doSecretKey": "DigitalOcean Spaces secret key",
+    "doPathPrefix": "Optional folder prefix for all uploaded files"
   }
 }

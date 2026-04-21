@@ -12,6 +12,9 @@
     "doRegion": "Exemplo: nyc3, ams3, sfo3",
     "doBucket": "Nome do Space criado no painel DigitalOcean",
     "doEndpoint": "Ex.: https://nyc3.digitaloceanspaces.com",
-    "doCdnEndpoint": "Ex.: https://meu-space.nyc3.cdn.digitaloceanspaces.com"
+    "doCdnEndpoint": "Ex.: https://meu-space.nyc3.cdn.digitaloceanspaces.com",
+    "doAccessKey": "Chave de acesso do Spaces",
+    "doSecretKey": "Chave secreta do Spaces",
+    "doPathPrefix": "Prefixo opcional para organizar arquivos em uma pasta"
   }
 }

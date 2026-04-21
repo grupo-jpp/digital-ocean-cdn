@@ -2,7 +2,8 @@
   "fields": {
     "doRegion": {
       "type": "varchar",
-      "tooltip": true
+      "tooltip": true,
+      "default": "nyc3"
     },
     "doBucket": {
       "type": "varchar",
@@ -18,10 +19,12 @@
       "tooltip": true
     },
     "doAccessKey": {
-      "type": "varchar"
+      "type": "varchar",
+      "tooltip": true
     },
     "doSecretKey": {
-      "type": "password"
+      "type": "password",
+      "tooltip": true
     },
     "doPathPrefix": {
       "type": "varchar",

@@ -2,11 +2,11 @@
   {
     "label": "DigitalOcean Spaces",
     "style": "default",
-    "rows": [
-      [{ "name": "doSpacesEndpoint" }, { "name": "doSpacesRegion" }],
-      [{ "name": "doSpacesAccessKey" }, { "name": "doSpacesSecretKey" }],
-      [{ "name": "doSpacesCdnEndpoint" }, false]
-    ],
+      "rows": [
+        [{ "name": "doSpacesEndpoint" }, { "name": "doSpacesRegion" }],
+        [{ "name": "doSpacesAccessKey" }, { "name": "doSpacesSecretKey" }],
+        [{ "name": "doSpacesBucket" }, { "name": "doSpacesCdnEndpoint" }]
+      ],
     "dynamicLogicVisible": {
       "conditionGroup": [
         { "type": "in", "attribute": "type", "value": ["doSpaces"] }
