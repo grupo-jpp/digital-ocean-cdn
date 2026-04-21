@@ -1,0 +1,16 @@
+[
+  {
+    "label": "DigitalOcean Spaces",
+    "style": "default",
+    "rows": [
+      [{ "name": "doSpacesEndpoint" }, { "name": "doSpacesRegion" }],
+      [{ "name": "doSpacesAccessKey" }, { "name": "doSpacesSecretKey" }],
+      [{ "name": "doSpacesCdnEndpoint" }, false]
+    ],
+    "dynamicLogicVisible": {
+      "conditionGroup": [
+        { "type": "in", "attribute": "type", "value": ["doSpaces"] }
+      ]
+    }
+  }
+]
