@@ -55,8 +55,9 @@ php console.php migrate DigitalOceanCdn
 ## Configuration
 
 1. In the admin panel, go to **Administration → Storages**.
-2. Click **Create Storage** and select **Digital Ocean Spaces** as the type.
-3. Fill in the fields:
+2. (Optional but recommended) Go to **Administration → Connections** and create a **Digital Ocean Spaces** connection.
+3. Click **Create Storage** and select **Digital Ocean Spaces** as the type.
+4. Fill in the fields:
 
 | Field           | Key             | Description                                             |
 | --------------- | --------------- | ------------------------------------------------------- |
@@ -67,6 +68,7 @@ php console.php migrate DigitalOceanCdn
 | Access Key      | `doAccessKey`   | DigitalOcean Spaces access key                          |
 | Secret Key      | `doSecretKey`   | DigitalOcean Spaces secret key                          |
 | Path Prefix     | `doPathPrefix`  | Optional folder prefix inside the Space                 |
+| (Connection) Bucket | `doSpacesBucket` | Optional default bucket from a saved connection      |
 
 > If **CDN Endpoint** is provided, `getUrl()` returns a direct CDN URL; otherwise a presigned URL is generated.
 

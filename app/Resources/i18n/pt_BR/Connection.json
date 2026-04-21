@@ -8,6 +8,7 @@
     "doSpacesCdnEndpoint": "Endpoint do CDN"
   },
   "tooltips": {
+    "doSpacesBucket": "Bucket padrão opcional para esta conexão.",
     "doSpacesCdnEndpoint": "Opcional. URL pública do CDN (ex.: https://bucket.nyc3.cdn.digitaloceanspaces.com). Se vazio, usa o endpoint direto."
   },
   "options": {
