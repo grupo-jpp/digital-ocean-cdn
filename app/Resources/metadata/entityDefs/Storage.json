@@ -3,6 +3,54 @@
     "type": {
       "options": ["local", "digitalOceanSpaces"]
     },
+    "folder": {
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            {
+              "type": "equals",
+              "attribute": "type",
+              "value": "local"
+            }
+          ]
+        }
+      }
+    },
+    "path": {
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            {
+              "type": "equals",
+              "attribute": "type",
+              "value": "local"
+            }
+          ]
+        },
+        "required": {
+          "conditionGroup": [
+            {
+              "type": "equals",
+              "attribute": "type",
+              "value": "local"
+            }
+          ]
+        }
+      }
+    },
+    "syncFolders": {
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            {
+              "type": "equals",
+              "attribute": "type",
+              "value": "local"
+            }
+          ]
+        }
+      }
+    },
     "connection": {
       "type": "link",
       "conditionalProperties": {
