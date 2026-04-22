@@ -36,7 +36,6 @@ class DigitalOceanSpacesStorage implements FileStorageInterface
         $input = $file->_input ?? new \stdClass();
         $storage = $file->getStorage();
 
-        // produce a local temp file, then upload
         $tmp = $this->makeTempPath($file);
 
         try {
@@ -71,13 +70,11 @@ class DigitalOceanSpacesStorage implements FileStorageInterface
                     }
                 }
             } elseif (property_exists($input, 'allChunks')) {
-                // phase 2b
                 throw new BadRequest('Chunked upload is not yet supported on Digital Ocean Spaces storage.');
             } else {
                 throw new BadRequest('No file source provided.');
             }
 
-            // capture metadata before upload
             $mimeType = mime_content_type($tmp) ?: 'application/octet-stream';
             if ($mimeType === 'text/plain' && pathinfo($tmp, PATHINFO_EXTENSION) === 'csv') {
                 $mimeType = 'text/csv';
@@ -87,7 +84,6 @@ class DigitalOceanSpacesStorage implements FileStorageInterface
             $file->set('fileSize', filesize($tmp));
             $file->set('hash', md5_file($tmp));
 
-            // upload
             $this->putObject($storage, $this->getKey($file), $tmp, $mimeType);
 
             return true;
@@ -112,7 +108,7 @@ class DigitalOceanSpacesStorage implements FileStorageInterface
                 'Key'    => $this->getKey($file),
             ]);
         } catch (S3Exception $e) {
-            // soft fail — object may already be gone
+            // soft fail
         }
         return true;
     }
@@ -162,7 +158,7 @@ class DigitalOceanSpacesStorage implements FileStorageInterface
         }
     }
 
-    // ---------- stubs (phase 2b/2c) ----------
+    // ---------- stubs ----------
 
     public function scan(Storage $storage): void
     {
@@ -174,12 +170,7 @@ class DigitalOceanSpacesStorage implements FileStorageInterface
     public function moveFolder(string $entityId, string $wasParentId, string $becameParentId): bool { return true; }
     public function deleteFolderPermanently(Folder $folder): bool { return true; }
 
-    public function renameFile(File $file): bool
-    {
-        // key is derived from id/path, rename in DB doesn't move the object
-        return true;
-    }
-
+    public function renameFile(File $file): bool { return true; }
     public function moveFile(File $file): bool { return true; }
 
     public function createChunk(\stdClass $input, Storage $storage): array
@@ -206,19 +197,39 @@ class DigitalOceanSpacesStorage implements FileStorageInterface
             throw new Error("Storage '{$storage->get('name')}' has no connection.");
         }
 
+        // Delega a criação do S3Client ao ConnectionType (que descriptografa a senha via decryptPassword).
+        try {
+            $connectionType = new \DigitalOceanCdn\ConnectionType\ConnectionDoSpaces();
+            if (method_exists($connectionType, 'setContainer')) {
+                $connectionType->setContainer($this->container);
+            }
+            $client = $connectionType->connect($conn);
+
+            if ($client instanceof S3Client) {
+                return $this->clients[$id] = $client;
+            }
+        } catch (\Throwable $e) {
+            $GLOBALS['log']->warning('DO Spaces: ConnectionType->connect failed, falling back. ' . $e->getMessage());
+        }
+
+        // Fallback: monta manualmente e tenta descriptografar o secret
         $endpoint = (string)$conn->get('doSpacesEndpoint');
         $region   = (string)($conn->get('doSpacesRegion') ?: 'us-east-1');
         $key      = (string)$conn->get('doSpacesAccessKey');
         $secret   = (string)$conn->get('doSpacesSecretKey');
 
-        // try to decrypt secret if the field stores encrypted value
-        if ($secret !== '' && $this->container->has('crypt')) {
+        if ($secret !== '') {
             try {
-                $decrypted = $this->container->get('crypt')->decrypt($secret);
-                if (!empty($decrypted)) {
-                    $secret = $decrypted;
+                $decoded = $this->container
+                    ->get('serviceFactory')
+                    ->create('Connection')
+                    ->decryptPassword($secret);
+                if (is_string($decoded) && $decoded !== '') {
+                    $secret = $decoded;
                 }
-            } catch (\Throwable $e) { /* keep raw */ }
+            } catch (\Throwable $e) {
+                // mantém valor original
+            }
         }
 
         return $this->clients[$id] = new S3Client([
@@ -235,7 +246,6 @@ class DigitalOceanSpacesStorage implements FileStorageInterface
 
     protected function getEndpointForPublicUrl(Storage $storage): string
     {
-        // https://{region}.digitaloceanspaces.com → https://{bucket}.{region}.digitaloceanspaces.com
         $conn = $storage->get('connection');
         $endpoint = rtrim((string)$conn->get('doSpacesEndpoint'), '/');
         $bucket = (string)$storage->get('bucket');
@@ -250,7 +260,6 @@ class DigitalOceanSpacesStorage implements FileStorageInterface
         $storage = $file->getStorage();
         $prefix = trim((string)$storage->get('keyPrefix'), '/');
 
-        // store by id to keep keys stable across renames
         $ext = $file->get('extension') ?: pathinfo((string)$file->get('name'), PATHINFO_EXTENSION);
         $name = $file->get('id') . ($ext ? '.' . $ext : '');
 

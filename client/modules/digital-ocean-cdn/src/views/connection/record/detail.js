@@ -4,45 +4,52 @@ Espo.define(
   (Dep) => {
     return Dep.extend({
       setup() {
-        console.log(
-          "[DO-CDN] connection detail setup, type=",
-          this.model.get("type")
-        );
-        Dep.prototype.setup.call(this);
-        console.log(
-          "[DO-CDN] after parent setup, detailLayout=",
-          this.detailLayout
-        );
+        let _gl = null;
+        Object.defineProperty(this, "gridLayout", {
+          get: () => _gl,
+          set: (v) => {
+            console.log("[DO-CDN] gridLayout SET", v);
+            console.trace();
+            _gl = v;
+          },
+          configurable: true,
+        });
 
-        if (this.model.get("type") === "doSpaces") {
-          this.applyDoSpacesLayout();
-          console.log("[DO-CDN] applied DO layout", this.detailLayout);
-        }
+        Dep.prototype.setup.call(this);
 
         this.listenTo(this.model, "change:type", () => {
-          console.log("[DO-CDN] type changed to", this.model.get("type"));
-          if (this.model.get("type") === "doSpaces") {
-            this.applyDoSpacesLayout();
-            this.reRender();
-          } else if (this.model.previous("type") === "doSpaces") {
-            this.detailLayout = null;
-            this.reRender();
-          }
+          this.gridLayout = null;
+          this.reRender();
         });
       },
 
-      applyDoSpacesLayout() {
-        this.detailLayout = [
-          {
-            label: "Details",
-            rows: [
-              [{ name: "name" }, { name: "type" }],
-              [{ name: "doSpacesEndpoint" }, { name: "doSpacesRegion" }],
-              [{ name: "doSpacesAccessKey" }, { name: "doSpacesSecretKey" }],
-              [{ name: "doSpacesBucket" }, { name: "doSpacesCdnEndpoint" }],
-            ],
-          },
-        ];
+      getGridLayout(callback) {
+        console.log(
+          "[DO-CDN] getGridLayout called, type=",
+          this.model.get("type")
+        );
+        if (this.model.get("type") === "doSpaces") {
+          const detailLayout = [
+            {
+              label: "Details",
+              rows: [
+                [{ name: "name" }, { name: "type" }],
+                [{ name: "doSpacesEndpoint" }, { name: "doSpacesRegion" }],
+                [{ name: "doSpacesAccessKey" }, { name: "doSpacesSecretKey" }],
+                [{ name: "doSpacesBucket" }, { name: "doSpacesCdnEndpoint" }],
+              ],
+            },
+          ];
+
+          this.gridLayout = {
+            type: this.gridLayoutType || "record",
+            layout: this.convertDetailLayout(detailLayout),
+          };
+
+          callback(this.gridLayout);
+          return;
+        }
+        Dep.prototype.getGridLayout.call(this, callback);
       },
     });
   }
