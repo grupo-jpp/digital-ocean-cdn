@@ -13,6 +13,7 @@ use Atro\Entities\File;
 use Atro\Entities\Folder;
 use Atro\Entities\Storage;
 use Aws\S3\S3Client;
+use Aws\S3\MultipartUploader;
 use Aws\S3\Exception\S3Exception;
 use Espo\ORM\EntityManager;
 use Psr\Http\Message\StreamInterface;
@@ -70,7 +71,26 @@ class DigitalOceanSpacesStorage implements FileStorageInterface
                     }
                 }
             } elseif (property_exists($input, 'allChunks')) {
-                throw new BadRequest('Chunked upload is not yet supported on Digital Ocean Spaces storage.');
+                $hash = (string)($input->fileUniqueHash ?? '');
+                if ($hash === '') {
+                    throw new BadRequest('Missing fileUniqueHash for chunked upload.');
+                }
+                $chunkDir = $this->getChunksDir($storage) . DIRECTORY_SEPARATOR . $hash;
+
+                $f = fopen($tmp, 'a+');
+                try {
+                    foreach ($input->allChunks as $chunk) {
+                        $chunkPath = $chunkDir . DIRECTORY_SEPARATOR . $chunk;
+                        if (!file_exists($chunkPath)) {
+                            throw new Error("Chunk not found: $chunkPath");
+                        }
+                        fwrite($f, file_get_contents($chunkPath));
+                    }
+                } finally {
+                    fclose($f);
+                }
+
+                $this->removeDir($chunkDir);
             } else {
                 throw new BadRequest('No file source provided.');
             }
@@ -182,7 +202,7 @@ class DigitalOceanSpacesStorage implements FileStorageInterface
         }
     }
 
-    // ---------- stubs ----------
+    // ---------- stubs / simples ----------
 
     public function scan(Storage $storage): void
     {
@@ -197,12 +217,39 @@ class DigitalOceanSpacesStorage implements FileStorageInterface
     public function renameFile(File $file): bool { return true; }
     public function moveFile(File $file): bool { return true; }
 
+    // ---------- chunked upload ----------
+
     public function createChunk(\stdClass $input, Storage $storage): array
     {
-        throw new BadRequest('Chunked upload is not yet supported on Digital Ocean Spaces storage.');
+        if (empty($input->fileUniqueHash) || !isset($input->start) || !isset($input->piece)) {
+            throw new BadRequest('Invalid chunk payload.');
+        }
+
+        $dir = $this->getChunksDir($storage) . DIRECTORY_SEPARATOR . $input->fileUniqueHash;
+        if (!is_dir($dir)) {
+            @mkdir($dir, 0775, true);
+        }
+
+        file_put_contents(
+            $dir . DIRECTORY_SEPARATOR . $input->start,
+            LocalStorage::parseInputFileContent($input->piece)
+        );
+
+        $chunks = array_values(array_filter(
+            scandir($dir),
+            fn($f) => $f !== '.' && $f !== '..'
+        ));
+        sort($chunks, SORT_NATURAL);
+
+        return $chunks;
     }
 
-    public function deleteCache(Storage $storage): void { /* no-op */ }
+    public function deleteCache(Storage $storage): void
+    {
+        $this->removeDir($this->getChunksDir($storage));
+    }
+
+    // ---------- thumbnails ----------
 
     public function getThumbnail(File $file, string $size): ?string
     {
@@ -279,7 +326,7 @@ class DigitalOceanSpacesStorage implements FileStorageInterface
             throw new Error("Storage '{$storage->get('name')}' has no connection.");
         }
 
-        // Delega a criação do S3Client ao ConnectionType (que descriptografa a senha via decryptPassword).
+        // Delega a criação do S3Client ao ConnectionType (descriptografa a senha via decryptPassword).
         try {
             $connectionType = new \DigitalOceanCdn\ConnectionType\ConnectionDoSpaces($this->container);
             $client = $connectionType->connect($conn);
@@ -347,8 +394,28 @@ class DigitalOceanSpacesStorage implements FileStorageInterface
 
     protected function putObject(Storage $storage, string $key, string $localFile, string $mimeType): void
     {
-        $this->getClient($storage)->putObject([
-            'Bucket'      => $storage->get('bucket'),
+        $client = $this->getClient($storage);
+        $bucket = (string)$storage->get('bucket');
+        $size   = (int)@filesize($localFile);
+
+        // Acima de 100MB usa multipart
+        if ($size > 100 * 1024 * 1024) {
+            $uploader = new MultipartUploader($client, $localFile, [
+                'bucket'          => $bucket,
+                'key'             => $key,
+                'part_size'       => 16 * 1024 * 1024,
+                'concurrency'     => 4,
+                'before_initiate' => function (\Aws\Command $cmd) use ($mimeType) {
+                    $cmd['ContentType'] = $mimeType;
+                    $cmd['ACL']         = 'public-read';
+                },
+            ]);
+            $uploader->upload();
+            return;
+        }
+
+        $client->putObject([
+            'Bucket'      => $bucket,
             'Key'         => $key,
             'SourceFile'  => $localFile,
             'ContentType' => $mimeType,
@@ -363,6 +430,30 @@ class DigitalOceanSpacesStorage implements FileStorageInterface
             @mkdir($dir, 0775, true);
         }
         return $dir . '/' . uniqid('dos-', true);
+    }
+
+    protected function getChunksDir(Storage $storage): string
+    {
+        $dir = 'data/.do-spaces-chunks' . DIRECTORY_SEPARATOR . (string)$storage->get('id');
+        if (!is_dir($dir)) {
+            @mkdir($dir, 0775, true);
+        }
+        return $dir;
+    }
+
+    protected function removeDir(string $dir): void
+    {
+        if (!is_dir($dir)) {
+            return;
+        }
+        $it = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::CHILD_FIRST
+        );
+        foreach ($it as $f) {
+            $f->isDir() ? @rmdir($f->getPathname()) : @unlink($f->getPathname());
+        }
+        @rmdir($dir);
     }
 
     protected function getEntityManager(): EntityManager

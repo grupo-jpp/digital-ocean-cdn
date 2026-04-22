@@ -1,0 +1,5 @@
+{
+  "CleanDoSpacesCache": {
+    "cronExpression": "0 3 * * *"
+  }
+}
