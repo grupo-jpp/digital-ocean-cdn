@@ -204,8 +204,66 @@ class DigitalOceanSpacesStorage implements FileStorageInterface
 
     public function deleteCache(Storage $storage): void { /* no-op */ }
 
-    public function getThumbnail(File $file, string $size): ?string { return null; }
-    public function getThumbnailPdfImageCachePath(File $file): ?string { return null; }
+    public function getThumbnail(File $file, string $size): ?string
+    {
+        /** @var \Atro\Core\Utils\Thumbnail $creator */
+        $creator = $this->container->get(\Atro\Core\Utils\Thumbnail::class);
+
+        $thumbnailPath = $creator->preparePath($file, $size);
+
+        if ($creator->hasThumbnail($file, $size)) {
+            return $thumbnailPath;
+        }
+
+        // Baixa o original do Spaces para cache local
+        $ext = $file->get('extension') ?: pathinfo((string)$file->get('name'), PATHINFO_EXTENSION);
+        $cacheDir = 'data/.do-spaces-cache';
+        if (!is_dir($cacheDir)) {
+            @mkdir($cacheDir, 0775, true);
+        }
+        $localPath = $cacheDir . DIRECTORY_SEPARATOR . $file->get('id') . ($ext ? '.' . $ext : '');
+
+        if (!file_exists($localPath)) {
+            try {
+                file_put_contents($localPath, $this->getContents($file));
+            } catch (\Throwable $e) {
+                $GLOBALS['log']->error('DO Spaces: failed to fetch origin for thumb. ' . $e->getMessage());
+                return null;
+            }
+        }
+
+        // Tipos não suportados (ex.: SVG): apenas copia o arquivo para o path público
+        if (!$creator->isThumbnailSupported($file)) {
+            $publicPath = 'public' . DIRECTORY_SEPARATOR . $thumbnailPath;
+            if (!is_dir(dirname($publicPath))) {
+                @mkdir(dirname($publicPath), 0775, true);
+            }
+            if (!file_exists($publicPath)) {
+                @copy($localPath, $publicPath);
+            }
+            return $thumbnailPath;
+        }
+
+        $origin = $localPath;
+        if ($creator->isPdf($origin)) {
+            $origin = $creator->createImageFromPdf($file, $origin);
+        }
+
+        if (!$creator->create($origin, $size, $thumbnailPath)) {
+            return null;
+        }
+
+        return $thumbnailPath;
+    }
+
+    public function getThumbnailPdfImageCachePath(File $file): ?string
+    {
+        $dir = 'data/.do-spaces-pdf-cache' . DIRECTORY_SEPARATOR . (string)$file->get('id');
+        if (!is_dir($dir)) {
+            @mkdir($dir, 0775, true);
+        }
+        return $dir;
+    }
 
     // ---------- helpers ----------
 
@@ -223,10 +281,7 @@ class DigitalOceanSpacesStorage implements FileStorageInterface
 
         // Delega a criação do S3Client ao ConnectionType (que descriptografa a senha via decryptPassword).
         try {
-            $connectionType = new \DigitalOceanCdn\ConnectionType\ConnectionDoSpaces();
-            if (method_exists($connectionType, 'setContainer')) {
-                $connectionType->setContainer($this->container);
-            }
+            $connectionType = new \DigitalOceanCdn\ConnectionType\ConnectionDoSpaces($this->container);
             $client = $connectionType->connect($conn);
 
             if ($client instanceof S3Client) {
