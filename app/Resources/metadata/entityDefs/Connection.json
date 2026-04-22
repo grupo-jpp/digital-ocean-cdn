@@ -19,6 +19,221 @@
         "doSpaces"
       ]
     },
+    "host": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["atrocore", "pdoSql", "mysql", "psql", "msql", "ftp", "sftp", "oauth2", "oauth1", "otto", "cookie", "smtp", "vertica", "tokenAuthApi"] }] }
+      }
+    },
+    "port": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["atrocore", "pdoSql", "mysql", "psql", "msql", "ftp", "sftp", "oauth2", "oauth1", "otto", "cookie", "smtp", "vertica", "tokenAuthApi"] }] }
+      }
+    },
+    "dbName": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["atrocore", "pdoSql", "mysql", "psql", "msql", "vertica"] }] }
+      }
+    },
+    "oauthUrl": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["oauth2"] }] }
+      }
+    },
+    "oauthGrantType": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["oauth2"] }] }
+      }
+    },
+    "oauthClientId": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["oauth2"] }] }
+      }
+    },
+    "oauthClientSecret": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["oauth2"] }] }
+      }
+    },
+    "oauthScope": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["oauth2"] }] }
+      }
+    },
+    "vendorOauthUrl": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["oauth2"] }] }
+      }
+    },
+    "vendorOauthScopes": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["oauth2"] }] }
+      }
+    },
+    "dsn": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["pdoSql"] }] }
+      }
+    },
+    "server": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["otto"] }] }
+      }
+    },
+    "user": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["atrocore", "pdoSql", "mysql", "psql", "msql", "ftp", "sftp", "oauth1", "smtp", "vertica", "tokenAuthApi"] }] }
+      }
+    },
+    "password": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["atrocore", "pdoSql", "mysql", "psql", "msql", "ftp", "sftp", "oauth1", "smtp", "vertica", "tokenAuthApi"] }] }
+      }
+    },
+    "ftpSsl": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["ftp"] }] }
+      }
+    },
+    "requestTokenUrl": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["oauth1"] }] }
+      }
+    },
+    "accessTokenUrl": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["oauth1"] }] }
+      }
+    },
+    "callbackUrl": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["oauth1"] }] }
+      }
+    },
+    "linkUrl": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["oauth1"] }] }
+      }
+    },
+    "oauthConsumerKey": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["oauth1"] }] }
+      }
+    },
+    "oauthConsumerSecret": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["oauth1"] }] }
+      }
+    },
+    "oauthToken": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["oauth1"] }] }
+      }
+    },
+    "oauthTokenSecret": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["oauth1"] }] }
+      }
+    },
+    "apiTestUrl": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["tokenAuthApi"] }] }
+      }
+    },
+    "loginUrl": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["tokenAuthApi"] }] }
+      }
+    },
+    "additionalParameters": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["tokenAuthApi"] }] }
+      }
+    },
+    "atrocoreUrl": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["atrocore"] }] }
+      }
+    },
+    "atrocoreToken": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["atrocore"] }] }
+      }
+    },
+    "smtpServer": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["smtp"] }] }
+      }
+    },
+    "smtpPort": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["smtp"] }] }
+      }
+    },
+    "smtpAuthType": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["smtp"] }] }
+      }
+    },
+    "smtpSecurity": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["smtp"] }] }
+      }
+    },
+    "smtpUsername": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["smtp"] }] }
+      }
+    },
+    "smtpPassword": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["smtp"] }] }
+      }
+    },
+    "smtpClientId": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["smtp"] }] }
+      }
+    },
+    "smtpClientSecret": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["smtp"] }] }
+      }
+    },
+    "smtpOauthScope": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["smtp"] }] }
+      }
+    },
+    "smtpOauthAuthorizeUrl": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["smtp"] }] }
+      }
+    },
+    "smtpOauthTokenUrl": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["smtp"] }] }
+      }
+    },
+    "outboundEmailFromAddress": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["smtp"] }] }
+      }
+    },
+    "outboundEmailFromName": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["smtp"] }] }
+      }
+    },
+    "payload": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["tokenAuthApi"] }] }
+      }
+    },
+    "headers": {
+      "conditionalProperties": {
+        "visible": { "conditionGroup": [{ "type": "in", "attribute": "type", "value": ["tokenAuthApi"] }] }
+      }
+    },
     "doSpacesEndpoint": {
       "type": "url",
       "notStorable": true,
