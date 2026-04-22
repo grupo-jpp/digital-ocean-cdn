@@ -144,8 +144,32 @@ class DigitalOceanSpacesStorage implements FileStorageInterface
     public function getUrl(File $file): string
     {
         $storage = $file->getStorage();
-        $base = rtrim((string)($storage->get('cdnEndpoint') ?: $this->getEndpointForPublicUrl($storage)), '/');
-        return $base . '/' . $this->getKey($file);
+        $bucket  = (string)$storage->get('bucket');
+        $key     = $this->getKey($file);
+
+        // 1) Prefere CDN configurado no Connection (doSpacesCdnEndpoint)
+        $conn = $storage->get('connection');
+        $cdn  = $conn ? rtrim((string)$conn->get('doSpacesCdnEndpoint'), '/') : '';
+
+        // 2) Ou cdnEndpoint no Storage
+        if ($cdn === '') {
+            $cdn = rtrim((string)$storage->get('cdnEndpoint'), '/');
+        }
+
+        if ($cdn !== '') {
+            // Se o CDN não contém o bucket no host, injeta
+            $parts = parse_url($cdn);
+            $host  = $parts['host'] ?? '';
+            if ($bucket !== '' && $host !== '' && !str_starts_with($host, $bucket . '.')) {
+                $cdn = ($parts['scheme'] ?? 'https') . '://' . $bucket . '.' . $host
+                     . (isset($parts['path']) ? $parts['path'] : '');
+                $cdn = rtrim($cdn, '/');
+            }
+            return $cdn . '/' . $key;
+        }
+
+        // 3) Fallback: endpoint do Spaces + bucket virtual-hosted
+        return rtrim($this->getEndpointForPublicUrl($storage), '/') . '/' . $key;
     }
 
     public function isAvailable(Storage $storage): bool
