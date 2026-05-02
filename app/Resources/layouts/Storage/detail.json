@@ -5,7 +5,13 @@
     "rows": [
       [{ "name": "name" }, { "name": "isActive" }],
       [{ "name": "type" }, { "name": "folder" }],
-      [{ "name": "path" }, { "name": "syncFolders" }],
+      [{ "name": "path" }, { "name": "syncFolders" }]
+    ]
+  },
+  {
+    "label": "Digital Ocean Spaces",
+    "style": "default",
+    "rows": [
       [{ "name": "connection" }, { "name": "bucket" }],
       [{ "name": "cdnEndpoint" }, { "name": "keyPrefix" }]
     ]

@@ -19,6 +19,253 @@
         "doSpaces"
       ]
     },
+    "host": {
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            { "type": "notIn", "attribute": "type", "value": ["doSpaces"] }
+          ]
+        }
+      }
+    },
+    "port": {
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            { "type": "notIn", "attribute": "type", "value": ["doSpaces"] }
+          ]
+        }
+      }
+    },
+    "dbName": {
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            { "type": "notIn", "attribute": "type", "value": ["doSpaces"] }
+          ]
+        }
+      }
+    },
+    "user": {
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            { "type": "notIn", "attribute": "type", "value": ["doSpaces"] }
+          ]
+        }
+      }
+    },
+    "password": {
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            { "type": "notIn", "attribute": "type", "value": ["doSpaces"] }
+          ]
+        }
+      }
+    },
+
+    "url": {
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            { "type": "notIn", "attribute": "type", "value": ["doSpaces"] }
+          ]
+        }
+      }
+    },
+    "apiKey": {
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            { "type": "notIn", "attribute": "type", "value": ["doSpaces"] }
+          ]
+        }
+      }
+    },
+    "apiSecret": {
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            { "type": "notIn", "attribute": "type", "value": ["doSpaces"] }
+          ]
+        }
+      }
+    },
+    "token": {
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            { "type": "notIn", "attribute": "type", "value": ["doSpaces"] }
+          ]
+        }
+      }
+    },
+    "tokenType": {
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            { "type": "notIn", "attribute": "type", "value": ["doSpaces"] }
+          ]
+        }
+      }
+    },
+    "expiresAt": {
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            { "type": "notIn", "attribute": "type", "value": ["doSpaces"] }
+          ]
+        }
+      }
+    },
+    "refreshToken": {
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            { "type": "notIn", "attribute": "type", "value": ["doSpaces"] }
+          ]
+        }
+      }
+    },
+
+    "oauthUrl": {
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            { "type": "notIn", "attribute": "type", "value": ["doSpaces"] }
+          ]
+        }
+      }
+    },
+    "oauthTokenUrl": {
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            { "type": "notIn", "attribute": "type", "value": ["doSpaces"] }
+          ]
+        }
+      }
+    },
+    "oauthClientId": {
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            { "type": "notIn", "attribute": "type", "value": ["doSpaces"] }
+          ]
+        }
+      }
+    },
+    "oauthClientSecret": {
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            { "type": "notIn", "attribute": "type", "value": ["doSpaces"] }
+          ]
+        }
+      }
+    },
+    "oauthScope": {
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            { "type": "notIn", "attribute": "type", "value": ["doSpaces"] }
+          ]
+        }
+      }
+    },
+    "oauthRedirectUri": {
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            { "type": "notIn", "attribute": "type", "value": ["doSpaces"] }
+          ]
+        }
+      }
+    },
+    "oauthCallbackUrl": {
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            { "type": "notIn", "attribute": "type", "value": ["doSpaces"] }
+          ]
+        }
+      }
+    },
+
+    "smtpServer": {
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            { "type": "notIn", "attribute": "type", "value": ["doSpaces"] }
+          ]
+        }
+      }
+    },
+    "smtpPort": {
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            { "type": "notIn", "attribute": "type", "value": ["doSpaces"] }
+          ]
+        }
+      }
+    },
+    "smtpAuth": {
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            { "type": "notIn", "attribute": "type", "value": ["doSpaces"] }
+          ]
+        }
+      }
+    },
+    "smtpSecurity": {
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            { "type": "notIn", "attribute": "type", "value": ["doSpaces"] }
+          ]
+        }
+      }
+    },
+    "smtpUsername": {
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            { "type": "notIn", "attribute": "type", "value": ["doSpaces"] }
+          ]
+        }
+      }
+    },
+    "smtpPassword": {
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            { "type": "notIn", "attribute": "type", "value": ["doSpaces"] }
+          ]
+        }
+      }
+    },
+    "fromName": {
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            { "type": "notIn", "attribute": "type", "value": ["doSpaces"] }
+          ]
+        }
+      }
+    },
+    "fromAddress": {
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            { "type": "notIn", "attribute": "type", "value": ["doSpaces"] }
+          ]
+        }
+      }
+    },
+
     "doSpacesEndpoint": {
       "type": "url",
       "notStorable": true,
