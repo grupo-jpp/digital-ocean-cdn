@@ -29,6 +29,7 @@ class V1Dot1Dot6 extends Base
         try {
             $this->getPDO()->exec($sql);
         } catch (\Throwable $e) {
+            // Silently ignore errors (e.g. column already exists), following AtroCore migration conventions.
         }
     }
 }
