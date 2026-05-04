@@ -1,10 +1,26 @@
 [
   {
+    "label": "Details",
+    "style": "default",
+    "rows": [
+      [{ "name": "name" }, { "name": "isActive" }],
+      [{ "name": "type" }, { "name": "folder" }],
+      [{ "name": "path" }, { "name": "syncFolders" }]
+    ]
+  },
+  {
     "label": "Digital Ocean Spaces",
     "style": "default",
     "rows": [
       [{ "name": "connection" }, { "name": "bucket" }],
       [{ "name": "cdnEndpoint" }, { "name": "keyPrefix" }]
+    ]
+  },
+  {
+    "label": "Sync Status",
+    "style": "default",
+    "rows": [
+      [{ "name": "lastSyncAt" }, { "name": "lastSyncStatus" }]
     ]
   }
 ]

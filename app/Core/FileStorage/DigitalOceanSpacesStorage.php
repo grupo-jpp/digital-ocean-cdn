@@ -217,6 +217,39 @@ class DigitalOceanSpacesStorage implements FileStorageInterface
     public function renameFile(File $file): bool { return true; }
     public function moveFile(File $file): bool { return true; }
 
+    // ---------- sync helpers ----------
+
+    public function exists(Storage $storage, File $file): bool
+    {
+        try {
+            $this->getClient($storage)->headObject([
+                'Bucket' => $storage->get('bucket'),
+                'Key'    => $this->getKey($file),
+            ]);
+            return true;
+        } catch (S3Exception $e) {
+            return false;
+        }
+    }
+
+    public function upload(Storage $storage, File $file, string $contents): bool
+    {
+        $tmp = $this->makeTempPath($file);
+        try {
+            $written = file_put_contents($tmp, $contents);
+            if ($written === false) {
+                throw new Error("Failed to write temporary file for upload: {$tmp}");
+            }
+            $mimeType = mime_content_type($tmp) ?: 'application/octet-stream';
+            $this->putObject($storage, $this->getKey($file), $tmp, $mimeType);
+            return true;
+        } finally {
+            if (file_exists($tmp)) {
+                @unlink($tmp);
+            }
+        }
+    }
+
     // ---------- chunked upload ----------
 
     public function createChunk(\stdClass $input, Storage $storage): array

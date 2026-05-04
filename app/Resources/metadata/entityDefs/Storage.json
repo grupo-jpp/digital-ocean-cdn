@@ -129,6 +129,16 @@
           ]
         }
       }
+    },
+    "lastSyncAt": {
+      "type": "datetime",
+      "readOnly": true,
+      "notStorable": false
+    },
+    "lastSyncStatus": {
+      "type": "text",
+      "readOnly": true,
+      "notStorable": false
     }
   },
   "links": {
