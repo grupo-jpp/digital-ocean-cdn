@@ -3,11 +3,16 @@
     "connection": "Connection",
     "bucket": "Bucket (Space name)",
     "cdnEndpoint": "CDN Endpoint",
-    "keyPrefix": "Key Prefix"
+    "keyPrefix": "Key Prefix",
+    "lastSyncAt": "Last Sync At",
+    "lastSyncStatus": "Sync Status"
   },
   "tooltips": {
     "cdnEndpoint": "Optional CDN URL (e.g. https://cdn.example.com). Falls back to the Spaces endpoint.",
     "keyPrefix": "Optional object-key prefix inside the bucket (e.g. 'pim/files')."
+  },
+  "labels": {
+    "Sync Status": "Sync Status"
   },
   "options": {
     "type": {

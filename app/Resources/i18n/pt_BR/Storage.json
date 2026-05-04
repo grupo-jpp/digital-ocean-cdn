@@ -3,11 +3,16 @@
     "connection": "Conexão",
     "bucket": "Bucket (Space)",
     "cdnEndpoint": "Endpoint da CDN",
-    "keyPrefix": "Prefixo de chave"
+    "keyPrefix": "Prefixo de chave",
+    "lastSyncAt": "Última Sincronização",
+    "lastSyncStatus": "Status da Sincronização"
   },
   "tooltips": {
     "cdnEndpoint": "URL pública da CDN (ex.: https://cdn.exemplo.com). Se vazio, usa o endpoint do Spaces.",
     "keyPrefix": "Prefixo opcional para as chaves no bucket (ex.: 'pim/files')."
+  },
+  "labels": {
+    "Sync Status": "Status da Sincronização"
   },
   "options": {
     "type": {
