@@ -91,34 +91,6 @@
           ]
         }
       }
-    },
-    "doSpacesCdnEndpoint": {
-      "type": "url",
-      "notStorable": true,
-      "dataField": true,
-      "trim": true,
-      "tooltip": true,
-      "conditionalProperties": {
-        "visible": {
-          "conditionGroup": [
-            { "type": "in", "attribute": "type", "value": ["doSpaces"] }
-          ]
-        }
-      }
-    },
-    "doSpacesBucket": {
-      "type": "varchar",
-      "notStorable": true,
-      "dataField": true,
-      "trim": true,
-      "tooltip": true,
-      "conditionalProperties": {
-        "visible": {
-          "conditionGroup": [
-            { "type": "in", "attribute": "type", "value": ["doSpaces"] }
-          ]
-        }
-      }
     }
   },
   "links": {

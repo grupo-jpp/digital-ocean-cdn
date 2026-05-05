@@ -1,5 +1,14 @@
 [
   {
+    "label": "Details",
+    "style": "default",
+    "rows": [
+      [{ "name": "name" }, { "name": "isActive" }],
+      [{ "name": "type" }, { "name": "folder" }],
+      [{ "name": "path" }, { "name": "syncFolders" }]
+    ]
+  },
+  {
     "label": "Digital Ocean Spaces",
     "style": "default",
     "rows": [
