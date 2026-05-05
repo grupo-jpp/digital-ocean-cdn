@@ -4,8 +4,7 @@
     "style": "default",
     "rows": [
       [{ "name": "doSpacesEndpoint" }, { "name": "doSpacesRegion" }],
-      [{ "name": "doSpacesAccessKey" }, { "name": "doSpacesSecretKey" }],
-      [{ "name": "doSpacesCdnEndpoint" }, { "name": "doSpacesBucket" }]
+      [{ "name": "doSpacesAccessKey" }, { "name": "doSpacesSecretKey" }]
     ]
   }
 ]

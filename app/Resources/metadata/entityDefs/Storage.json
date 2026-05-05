@@ -133,12 +133,34 @@
     "lastSyncAt": {
       "type": "datetime",
       "readOnly": true,
-      "notStorable": false
+      "notStorable": false,
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            {
+              "type": "equals",
+              "attribute": "type",
+              "value": "digitalOceanSpaces"
+            }
+          ]
+        }
+      }
     },
     "lastSyncStatus": {
       "type": "text",
       "readOnly": true,
-      "notStorable": false
+      "notStorable": false,
+      "conditionalProperties": {
+        "visible": {
+          "conditionGroup": [
+            {
+              "type": "equals",
+              "attribute": "type",
+              "value": "digitalOceanSpaces"
+            }
+          ]
+        }
+      }
     }
   },
   "links": {

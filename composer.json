@@ -1,5 +1,6 @@
 {
   "name": "atrocore/digital-ocean-cdn",
+  "version": "1.1.6",
   "description": "Digital Ocean Spaces CDN integration for AtroCore/AtroPIM",
   "type": "atrocore-module",
   "license": "MIT",

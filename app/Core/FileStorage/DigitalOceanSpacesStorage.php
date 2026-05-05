@@ -167,14 +167,7 @@ class DigitalOceanSpacesStorage implements FileStorageInterface
         $bucket  = (string)$storage->get('bucket');
         $key     = $this->getKey($file);
 
-        // 1) Prefere CDN configurado no Connection (doSpacesCdnEndpoint)
-        $conn = $storage->get('connection');
-        $cdn  = $conn ? rtrim((string)$conn->get('doSpacesCdnEndpoint'), '/') : '';
-
-        // 2) Ou cdnEndpoint no Storage
-        if ($cdn === '') {
-            $cdn = rtrim((string)$storage->get('cdnEndpoint'), '/');
-        }
+        $cdn = rtrim((string)$storage->get('cdnEndpoint'), '/');
 
         if ($cdn !== '') {
             // Se o CDN não contém o bucket no host, injeta
@@ -188,7 +181,7 @@ class DigitalOceanSpacesStorage implements FileStorageInterface
             return $cdn . '/' . $key;
         }
 
-        // 3) Fallback: endpoint do Spaces + bucket virtual-hosted
+        // Fallback: endpoint do Spaces + bucket virtual-hosted
         return rtrim($this->getEndpointForPublicUrl($storage), '/') . '/' . $key;
     }
 
